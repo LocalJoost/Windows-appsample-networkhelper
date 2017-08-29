@@ -58,5 +58,8 @@ namespace NetworkHelper
     public interface IMessageReceivedEventArgs
     {
         void GetDeserializedMessage(ref object message);
+
+        byte[] GetRawMessage();
     }
+
 }

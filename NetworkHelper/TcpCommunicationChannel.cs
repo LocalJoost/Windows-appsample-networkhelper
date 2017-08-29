@@ -89,6 +89,26 @@ namespace NetworkHelper
             DisconnectFromRemote();
         }
 
+        public async Task SendRemoteMessageAsync(byte[] data)
+        {
+            // Connect to the remote host to ensure that the connection exists.
+            await ConnectToRemoteAsync();
+
+            using (var writer = new DataWriter(_remoteSocket.OutputStream))
+            {
+                byte[] dataLength = BitConverter.GetBytes(data.Length);
+
+                writer.WriteBytes(dataLength);
+                writer.WriteBytes(data);
+
+                await writer.StoreAsync();
+                await writer.FlushAsync();
+            }
+
+            // Disconnect from the remote host.
+            DisconnectFromRemote();
+        }
+
         /// <summary>
         /// Creates a TCP socket and binds to the CommunicationPort.
         /// Use the default JsonSerializer if null is passed into the serializer parameter.
@@ -205,6 +225,11 @@ namespace NetworkHelper
         public override string ToString()
         {
             return System.Text.Encoding.ASCII.GetString(Message);
+        }
+
+        public byte[] GetRawMessage()
+        {
+            return Message;
         }
     }
 }
