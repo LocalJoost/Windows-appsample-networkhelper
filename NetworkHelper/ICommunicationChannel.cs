@@ -45,6 +45,11 @@ namespace NetworkHelper
         Task SendRemoteMessageAsync(object message);
 
         /// <summary>
+        /// Sends a serialized object to the remote.
+        /// </summary>
+        Task SendRemoteMessageAsync(byte[] message);
+
+        /// <summary>
         /// Starts listening for messages.
         /// </summary>
         Task<bool> StartListeningAsync();
